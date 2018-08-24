@@ -29,3 +29,25 @@ describe('MultiAuth',()=>{
     });
  
 });
+
+describe('MultiAuth-2',()=>{
+
+    it('Testing Receiver  ', async ()=>{
+        assert.equal(await auth.methods.receiver().call(),accounts[3]);
+    });
+
+    it('Testing The Contract balance  ', async ()=>{
+        const bal = await auth.methods.getContractBalance().call();
+        assert.equal(bal,'20000000000000000000');   
+    }); 
+
+    it('Testing The Approval ', async ()=>{
+       await auth.methods.approve().send({from:accounts[1]}); // First approver 
+       await auth.methods.approve().send({from:accounts[2]}); // Second approver     
+    });
+
+    it('Testing The Receivers balance ', async ()=>{         
+      const accBal = await  web3.eth.getBalance(accounts[3]);
+      assert.ok(accBal >= 120000000000000000000);        
+     });
+});
