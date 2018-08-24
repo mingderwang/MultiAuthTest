@@ -1,9 +1,25 @@
-const path = require('path');
-const fs = require('fs');
 const solc = require('solc'); 
+const { readFileSync } = require('fs');
 
-const sourcePath = path.resolve(__dirname,'contracts','SimpleStorage.sol');
+const params = {
+  language: "Solidity",
+  sources: {
+    'MultiAuth': {
+      content: readFileSync('./contracts/MultiAuth.sol', 'utf-8')
+    }
+  },
+    settings: {
+      outputSelection: {
+        "*": {
+          "*": [ "abi", "evm.bytecode" ]
+        }
+      }
+    }
+};
 
-const source = fs.readFileSync(sourcePath,'utf8');
+const compiled = JSON.parse(solc.compileStandardWrapper(JSON.stringify(params)));
+//console.log(compiled)
 
-console.log(solc.compile(source,1));
+// check the result
+module.exports = compiled
+
